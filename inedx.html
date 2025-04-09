@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+  <meta charset="UTF-8">
+  <title>ESRAA|QRUEN</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    body {
+      background: #1F2937;
+      margin: 0;
+      padding: 50px 20px;
+      font-family: 'Arial', sans-serif;
+      direction: rtl;
+      text-align: center;
+      color: #E5E7EB;
+      transition: background 0.5s ease;
+    }
+
+    .profile-img {
+      width: 150px;
+      height: 150px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 5px solid #3B82F6;
+      transition: transform 0.3s ease;
+    }
+
+    .profile-img:hover {
+      transform: scale(1.05);
+    }
+
+    .profile-header {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 20px;
+      direction: ltr;
+    }
+
+    .profile-name {
+      font-size: 2em;
+      font-weight: bold;
+    }
+
+    .verified {
+      color: #3B82F6;
+      font-size: 1.2em;
+      display: inline-flex;
+      align-items: center;
+      transition: transform 0.3s ease;
+    }
+
+    .verified:hover {
+      transform: scale(1.2);
+    }
+
+    .social-icons {
+      margin-top: 30px;
+      display: inline-flex;
+      gap: 20px;
+      align-items: center;
+      position: relative;
+    }
+
+    .social-icons a {
+      position: relative;
+      transition: transform 0.3s ease;
+      display: inline-block;
+    }
+
+    .social-icons a:hover {
+      transform: translateY(-5px) scale(1.1);
+    }
+
+    .social-icons img {
+      width: 32px;
+      height: 32px;
+      object-fit: contain;
+      transition: transform 0.3s ease;
+    }
+
+    .platform-x img {
+      width: 26px;
+      height: 26px;
+    }
+
+    .social-icons a::after {
+      content: attr(data-tooltip);
+      position: absolute;
+      bottom: -28px;
+      right: 50%;
+      transform: translateX(50%) scale(0.8);
+      background: rgba(0, 0, 0, 0.65);
+      color: #fff;
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-size: 0.75em;
+      white-space: nowrap;
+      opacity: 0;
+      pointer-events: none;
+      transition: all 0.3s ease;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+    }
+
+    .social-icons a:hover::after {
+      opacity: 1;
+      transform: translateX(50%) scale(1);
+    }
+
+    .settings-btn {
+      position: fixed;
+      top: 20px;
+      left: 20px;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid #3B82F6;
+      color: #3B82F6;
+      padding: 10px;
+      border-radius: 12px;
+      cursor: pointer;
+      z-index: 999;
+      transition: background 0.3s ease, transform 0.3s ease;
+    }
+
+    .settings-btn:hover {
+      background: rgba(59, 130, 246, 0.1);
+      transform: scale(1.05);
+    }
+
+    .settings-panel {
+      position: fixed;
+      top: 70px;
+      left: 20px;
+      background: rgba(0, 0, 0, 0.6);
+      padding: 10px 15px;
+      border-radius: 10px;
+      color: #fff;
+      font-size: 0.9em;
+      display: none;
+      z-index: 1000;
+      animation: fadeIn 0.4s ease;
+    }
+
+    .settings-panel label {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .settings-panel input {
+      transform: scale(1.2);
+      cursor: pointer;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: scale(0.95); }
+      to { opacity: 1; transform: scale(1); }
+    }
+  </style>
+
+  <!-- مكتبة توليد الباركود -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js"></script>
+</head>
+<body>
+
+  <!-- زر الإعدادات -->
+  <button class="settings-btn" id="settingsBtn" title="الإعدادات">
+    <i class="fa-solid fa-gear"></i>
+  </button>
+
+  <!-- لوحة الإعدادات -->
+  <div class="settings-panel" id="settingsPanel">
+    <label>
+      <input type="checkbox" id="lockColor">
+      تثبيت الخلفية الحالية
+    </label>
+    <hr style="margin: 10px 0; opacity: 0.3;">
+    <button id="generateQR" style="background:#3B82F6;color:white;border:none;padding:6px 10px;border-radius:8px;cursor:pointer;font-size:0.9em;">
+      الحصول على رمز استجابة سريعة
+    </button>
+    <div id="qrContainer" style="display:none; margin-top:10px; animation: fadeIn 0.5s ease;">
+      <canvas id="qrcode"></canvas>
+    </div>
+  </div>
+
+  <!-- صورة الملف الشخصي -->
+  <img src="https://i.ibb.co/TxdTzfLs/In-Shot.jpg" alt="صورة الملف الشخصي" class="profile-img">
+
+  <!-- الاسم + التوثيق -->
+  <div class="profile-header">
+    <div class="profile-name">ESRAA|QRUEN</div>
+    <div class="verified" title="حساب موثق">
+      <i class="fa-solid fa-circle-check"></i>
+    </div>
+  </div>
+
+  <!-- الأيقونات -->
+  <div class="social-icons">
+    <a href="https://www.tiktok.com/@esraa_2025qruen" target="_blank" data-tooltip="TikTok">
+      <img src="https://cdn-icons-png.flaticon.com/128/3046/3046125.png" alt="TikTok">
+    </a>
+    <a href="https://www.instagram.com/_8ah_me_d?igsh=MWQybmJhdnRka3B4NQ==" target="_blank" data-tooltip="Instagram">
+      <img src="https://cdn-icons-png.flaticon.com/128/2111/2111491.png" alt="Instagram">
+    </a>
+    <a href="https://x.com/AhmedE98859" target="_blank" data-tooltip="X" class="platform-x">
+      <img src="https://i.ibb.co/rGBfxBw6/twitter.png" alt="X">
+    </a>
+    <a href="https://yourwebsite.com" target="_blank" data-tooltip="الموقع">
+      <img src="https://cdn-icons-png.flaticon.com/128/558/558593.png" alt="Website">
+    </a>
+  </div>
+
+  <script>
+    let previousColor = '#1F2937';
+    let locked = false;
+
+    // تحميل الخلفية من localStorage إذا كانت محفوظة
+    const savedColor = localStorage.getItem('backgroundColor');
+    if (savedColor) {
+      document.body.style.background = savedColor;
+    }
+
+    document.body.addEventListener('click', (e) => {
+      const isInsideSettings = e.target.closest('#settingsBtn') || e.target.closest('#settingsPanel');
+      if (isInsideSettings) return;
+
+      const x = e.clientX;
+      const half = window.innerWidth / 2;
+
+      if (x > half && !locked) {
+        previousColor = document.body.style.background || '#1F2937';
+        const randomColor = '#' + Math.floor(Math.random() * 0xFFFFFF).toString(16).padStart(6, '0');
+        document.body.style.background = randomColor;
+
+        if (locked) {
+          localStorage.setItem('backgroundColor', randomColor);
+        }
+      } else if (x < half && !locked) {
+        document.body.style.background = previousColor;
+      }
+    });
+
+    const settingsBtn = document.getElementById('settingsBtn');
+    const settingsPanel = document.getElementById('settingsPanel');
+    const lockColorCheckbox = document.getElementById('lockColor');
+
+    settingsBtn.addEventListener('click', () => {
+      settingsPanel.style.display = settingsPanel.style.display === 'block' ? 'none' : 'block';
+    });
+
+    lockColorCheckbox.addEventListener('change', (e) => {
+      locked = e.target.checked;
+      if (locked) {
+        localStorage.setItem('backgroundColor', document.body.style.background);
+      } else {
+        localStorage.removeItem('backgroundColor');
+      }
+    });
+
+    // توليد الباركود عند الضغط
+    document.getElementById('generateQR').addEventListener('click', () => {
+      const qr = new QRious({
+        element: document.getElementById('qrcode'),
+        value: "https://yourwebsite.com", // استبدل بالرابط الذي تريده
+        size: 150,
+        background: 'white',
+        foreground: '#1F2937',
+        level: 'H'
+      });
+      document.getElementById('qrContainer').style.display = 'block';
+    });
+  </script>
+
+  <!-- أيقونات Font Awesome -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js" defer></script>
+</body>
+</html>
